@@ -1,5 +1,8 @@
 from django.db import models
-
+from django.utils import timezone
+import pytz
+import datetime
+from datetime import timedelta
 
 class Passcard(models.Model):
     is_active = models.BooleanField(default=False)
@@ -18,7 +21,23 @@ class Visit(models.Model):
     passcard = models.ForeignKey(Passcard, on_delete=models.CASCADE)
     entered_at = models.DateTimeField()
     leaved_at = models.DateTimeField(null=True)
-
+    
+    def get_duration(self):
+        moscow_tz = timezone.pytz.timezone('Europe/Moscow')
+        if self.leaved_at is None:
+            differ = (timezone.localtime().astimezone(moscow_tz) - self.entered_at.astimezone(moscow_tz))
+        else:
+            differ = (self.leaved_at.astimezone(moscow_tz)- self.entered_at.astimezone(moscow_tz))
+        return differ
+    
+    def is_visit_long(self, minutes=60):
+        duration = self.get_duration()
+        return duration > timedelta(minutes=minutes)
+    
+    def format_duration(self):
+        duration = self.get_duration()
+        return str(duration).split(".")[0]
+        
     def __str__(self):
         return '{user} entered at {entered} {leaved}'.format(
             user=self.passcard.owner_name,
