@@ -30,7 +30,7 @@ class Visit(models.Model):
                 f'leaved at {self.leaved_at}'
                 if self.leaved_at else 'not leaved'
             )
-        )/Users/aleksejsmirnov/projectpython/django-orm-watching-storage/datacenter/models.py
+        )
     
     def get_duration(self):
         moscow_tz = timezone.pytz.timezone('Europe/Moscow')
