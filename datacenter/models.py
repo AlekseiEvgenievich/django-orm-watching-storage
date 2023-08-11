@@ -22,6 +22,16 @@ class Visit(models.Model):
     entered_at = models.DateTimeField()
     leaved_at = models.DateTimeField(null=True)
     
+    def __str__(self):
+        return '{user} entered at {entered} {leaved}'.format(
+            user=self.passcard.owner_name,
+            entered=self.entered_at,
+            leaved=(
+                f'leaved at {self.leaved_at}'
+                if self.leaved_at else 'not leaved'
+            )
+        )/Users/aleksejsmirnov/projectpython/django-orm-watching-storage/datacenter/models.py
+    
     def get_duration(self):
         moscow_tz = timezone.pytz.timezone('Europe/Moscow')
         if self.leaved_at is None:
@@ -37,13 +47,3 @@ class Visit(models.Model):
     def format_duration(self):
         duration = self.get_duration()
         return str(duration).split(".")[0]
-        
-    def __str__(self):
-        return '{user} entered at {entered} {leaved}'.format(
-            user=self.passcard.owner_name,
-            entered=self.entered_at,
-            leaved=(
-                f'leaved at {self.leaved_at}'
-                if self.leaved_at else 'not leaved'
-            )
-        )
