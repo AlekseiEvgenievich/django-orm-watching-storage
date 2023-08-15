@@ -1,1 +1,6 @@
 myenv/
+.replit
+.env
+pyproject.toml
+poetry.lock
+.DS_Store
